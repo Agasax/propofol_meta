@@ -54,7 +54,7 @@ cs_data |>
 # model fitting ----
 
 model1 <- brm(events | trials(total) ~ 0 + Intercept + group + (1 + group || study), # multilevel (AKA random effects) logistic model, allowing intercept (base event rate) and difference to vary between studies (|| rather than | excludes covariance between the two, which can't be estimated here)
-              family = binomial,
+              family = binomial(link ="logit"), # binomial likelihood, with logit link. In brms, these models are specified using "nubmer of events" | trials("number of subjects/trials") on the left hand side of the formula
               prior = prior(normal(0,1.5),class = "b",coef="Intercept")+ #prior for base rate, different than original analysis (more sensible)
                 prior(normal(0,2.82),class = "b") + # prior for difference propofol - comparator on log-odds scale, same as original analysis
                 prior(normal(0,0.5), class = "sd"), # prior for standard deviation for random effects, same as original analysis
